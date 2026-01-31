@@ -56,27 +56,37 @@ ShortDOI = {
     // Overlay management
 
     addToWindow(window) {
-        log("Updating window")
+        Zotero.debug("DOI Manager: addToWindow called");
 
-        let doc = window.document;
+        try {
+            let doc = window.document;
 
-        // createElementNS() necessary in Zotero 6; createElement() defaults to HTML in Zotero 7
-        //let HTML_NS = "http://www.w3.org/1999/xhtml";
-        //let XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+            // createElementNS() necessary in Zotero 6; createElement() defaults to HTML in Zotero 7
+            //let HTML_NS = "http://www.w3.org/1999/xhtml";
+            //let XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 
-        let stringBundle = Services.strings.createBundle(
-            "chrome://zoteroshortdoi/locale/zoteroshortdoi.properties"
-        );
+            let stringBundle = Services.strings.createBundle(
+                "chrome://zoteroshortdoi/locale/zoteroshortdoi.properties"
+            );
 
-        // Item menu
-        let itemmenu = _create(doc, "menu");
-        itemmenu.id = "zotero-itemmenu-shortdoi-menu";
-        itemmenu.setAttribute("class", "menu-iconic");
-        //itemmenu.setAttribute('image', 'xxx');
-        itemmenu.setAttribute(
-            "label",
-            stringBundle.GetStringFromName("shortdoi-menu-label")
-        );
+            // Check if item menu exists
+            let itemMenuParent = doc.getElementById("zotero-itemmenu");
+            Zotero.debug("DOI Manager: zotero-itemmenu found: " + !!itemMenuParent);
+
+            if (!itemMenuParent) {
+                Zotero.debug("DOI Manager: ERROR - zotero-itemmenu not found in document");
+                return;
+            }
+
+            // Item menu
+            let itemmenu = _create(doc, "menu");
+            itemmenu.id = "zotero-itemmenu-shortdoi-menu";
+            itemmenu.setAttribute("class", "menu-iconic");
+            //itemmenu.setAttribute('image', 'xxx');
+            itemmenu.setAttribute(
+                "label",
+                stringBundle.GetStringFromName("shortdoi-menu-label")
+            );
 
         let itemmenupopup = _create(doc, "menupopup");
         itemmenupopup.id = "zotero-itemmenu-shortdoi-menupopup";
@@ -212,6 +222,12 @@ ShortDOI = {
          doc.getElementById('menu_Tools-shortdoi-preferences')
          .setAttribute('label', stringBundle.GetStringFromName('makeItGreenInstead.label'));
          }*/
+
+            Zotero.debug("DOI Manager: Menu items added successfully");
+        } catch (e) {
+            Zotero.debug("DOI Manager: ERROR in addToWindow: " + e.message);
+            Zotero.logError(e);
+        }
     },
 
     addToAllWindows() {
