@@ -31,7 +31,14 @@ An add-on for [Zotero](https://www.zotero.org/) that fetches DOI names for journ
 - Code adapted in part from [Zotero Google Scholar Citations](https://github.com/beloglazov/zotero-scholar-citations) by Anton Beloglazov
 - Zotero 8 compatibility and updates by orbital188
 
-## Changes in This Fork (v1.6.0)
+## Changelog
+
+### v1.6.1
+
+- **String bundle fix**: Fixed NS_ERROR_FILE_NOT_FOUND by using locale-specific chrome URLs (`chrome://.../locale/en-US/...`) required for Zotero 8
+- **Locale handling**: Added fallback to en-US when locale file is not found
+
+### v1.6.0
 
 - **Zotero 8 compatibility**: Support for Zotero 8 with ESM module imports
 - **Services loading**: Fixed Services object loading across Zotero 6, 7, and 8

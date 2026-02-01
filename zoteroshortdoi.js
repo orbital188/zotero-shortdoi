@@ -65,9 +65,22 @@ ShortDOI = {
             //let HTML_NS = "http://www.w3.org/1999/xhtml";
             //let XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 
-            let stringBundle = Services.strings.createBundle(
-                "chrome://zoteroshortdoi/locale/zoteroshortdoi.properties"
-            );
+            // Chrome URL must include locale (en-US or de) for Zotero 8 compatibility
+            let locale = (typeof Zotero !== 'undefined' && Zotero.locale) ? Zotero.locale : 'en-US';
+            if (locale !== 'en-US' && locale !== 'de') {
+                locale = (typeof locale === 'string' && locale.startsWith('de')) ? 'de' : 'en-US';
+            }
+            let stringBundle;
+            try {
+                stringBundle = Services.strings.createBundle(
+                    "chrome://zoteroshortdoi/locale/" + locale + "/zoteroshortdoi.properties"
+                );
+            } catch (e) {
+                // Fallback to en-US if locale file not found
+                stringBundle = Services.strings.createBundle(
+                    "chrome://zoteroshortdoi/locale/en-US/zoteroshortdoi.properties"
+                );
+            }
 
             // Check if item menu exists
             let itemMenuParent = doc.getElementById("zotero-itemmenu");
