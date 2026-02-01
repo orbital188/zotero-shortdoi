@@ -2,11 +2,8 @@
 
 An add-on for [Zotero](https://www.zotero.org/) that fetches DOI names for journal articles using the CrossRef API and shortDOIs using [shortdoi.org](http://shortdoi.org). It also verifies stored DOIs and marks invalid ones.
 
-## Current status
-
 - **Version:** 1.6.6  
 - **Supported:**  8.x  
-  
 
 ## Features
 
@@ -28,9 +25,6 @@ An add-on for [Zotero](https://www.zotero.org/) that fetches DOI names for journ
 - Original work by [Brenton M. Wiernik](https://github.com/bwiernik) — [zotero-shortdoi](https://github.com/bwiernik/zotero-shortdoi)
 - Code adapted in part from [Zotero Google Scholar Citations](https://github.com/beloglazov/zotero-scholar-citations) by Anton Beloglazov
 - Zotero 8 compatibility and updates by orbital188
-
-
-- **Error handling**: Debug logging and improved error handling in bootstrap
 
 ---
 
