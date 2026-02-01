@@ -4,7 +4,7 @@
       "updates": [
         {
           "version": "1.6.0",
-          "update_link": "https://github.com/bwiernik/zotero-shortdoi/releases/download/v1.6.0/zotero-doi-manager-1.6.0.xpi",
+          "update_link": "https://github.com/orbital188/zotero-shortdoi/releases/download/v1.6.0/zotero-doi-manager-1.6.0.xpi",
           "applications": {
             "gecko": {
               "strict_min_version": "60.9",

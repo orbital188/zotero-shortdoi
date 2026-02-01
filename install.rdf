@@ -11,8 +11,8 @@
         em:type="2"
         em:creator="Brenton M. Wiernik"
         em:description="Plugin for fetching and validating DOI and shortDOI names"
-        em:homepageURL="https://github.com/bwiernik/zotero-shortdoi"
-        em:updateURL="https://raw.githubusercontent.com/bwiernik/zotero-shortdoi/master/update.json">
+        em:homepageURL="https://github.com/orbital188/zotero-shortdoi"
+        em:updateURL="https://raw.githubusercontent.com/orbital188/zotero-shortdoi/master/updates.json">
         <em:type>2</em:type>
         <em:bootstrap>true</em:bootstrap>
         <em:targetApplication>
