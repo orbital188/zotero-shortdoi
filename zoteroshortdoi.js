@@ -16,6 +16,32 @@ function _create(doc, name) {
     return elt;
 }
 
+// Fallback strings when createBundle fails (e.g. Zotero 8 chrome/jar resolution)
+const STRINGS_EN = {
+    "shortdoi-menu-label": "Manage DOIs",
+    "shortdoi-menu-short-label": "Get shortDOIs",
+    "shortdoi-menu-long-label": "Get long DOIs",
+    "shortdoi-menu-check-label": "Verify and clean DOIs",
+    "shortdoi-preferences-label": "DOI Manager Preferences…",
+    "shortdoi-autoretrieve-label": "Get DOIs for new items",
+    "shortdoi-autoretrieve-short-label": "shortDOIs",
+    "shortdoi-autoretrieve-long-label": "Long DOIs",
+    "shortdoi-autoretrieve-check-label": "Verify DOIs only",
+    "shortdoi-autoretrieve-no-label": "No"
+};
+
+function getString(key, stringBundle) {
+    if (stringBundle) {
+        try {
+            const str = stringBundle.GetStringFromName(key);
+            if (str) return str;
+        } catch (e) {
+            // Silently fall back to STRINGS_EN
+        }
+    }
+    return STRINGS_EN[key] || key;
+}
+
 ShortDOI = {
     id: null,
     version: null,
@@ -65,21 +91,46 @@ ShortDOI = {
             //let HTML_NS = "http://www.w3.org/1999/xhtml";
             //let XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 
-            // Chrome URL must include locale (en-US or de) for Zotero 8 compatibility
-            let locale = (typeof Zotero !== 'undefined' && Zotero.locale) ? Zotero.locale : 'en-US';
-            if (locale !== 'en-US' && locale !== 'de') {
-                locale = (typeof locale === 'string' && locale.startsWith('de')) ? 'de' : 'en-US';
+            // Try to load string bundle; use hardcoded fallback when it fails
+            let stringBundle = null;
+            if (typeof Services !== 'undefined') {
+                for (let locale of ['en-US', 'de']) {
+                    // Try multiple URL formats until one works
+                    let urlsToTry = [];
+
+                    if (Zotero.platformMajorVersion >= 102) {
+                        // Zotero 7+: try chrome:// URL first, then jar: URL
+                        urlsToTry.push("chrome://zoteroshortdoi/locale/" + locale + "/zoteroshortdoi.properties");
+                        if (this.rootURI) {
+                            let rootURI = this.rootURI.endsWith('/') ? this.rootURI : this.rootURI + '/';
+                            urlsToTry.push(rootURI + "locale/" + locale + "/zoteroshortdoi.properties");
+                        }
+                    } else if (this.rootURI) {
+                        // Zotero 6: use rootURI
+                        let rootURI = this.rootURI.endsWith('/') ? this.rootURI : this.rootURI + '/';
+                        urlsToTry.push(rootURI + "locale/" + locale + "/zoteroshortdoi.properties");
+                    }
+
+                    for (let url of urlsToTry) {
+                        try {
+                            stringBundle = Services.strings.createBundle(url);
+                            // Test that the bundle actually works by trying to get a string
+                            stringBundle.GetStringFromName("shortdoi-menu-label");
+                            // If we get here, the bundle works
+                            Zotero.debug("DOI Manager: Successfully loaded string bundle from: " + url);
+                            break;
+                        } catch (e) {
+                            // This URL didn't work, try next
+                            stringBundle = null;
+                        }
+                    }
+
+                    if (stringBundle) break;
+                }
             }
-            let stringBundle;
-            try {
-                stringBundle = Services.strings.createBundle(
-                    "chrome://zoteroshortdoi/locale/" + locale + "/zoteroshortdoi.properties"
-                );
-            } catch (e) {
-                // Fallback to en-US if locale file not found
-                stringBundle = Services.strings.createBundle(
-                    "chrome://zoteroshortdoi/locale/en-US/zoteroshortdoi.properties"
-                );
+
+            if (!stringBundle) {
+                Zotero.debug("DOI Manager: Failed to load string bundle, using fallback strings");
             }
 
             // Check if item menu exists
@@ -98,7 +149,7 @@ ShortDOI = {
             //itemmenu.setAttribute('image', 'xxx');
             itemmenu.setAttribute(
                 "label",
-                stringBundle.GetStringFromName("shortdoi-menu-label")
+                getString("shortdoi-menu-label", stringBundle)
             );
 
         let itemmenupopup = _create(doc, "menupopup");
@@ -108,7 +159,7 @@ ShortDOI = {
         updateShort.id = "zotero-itemmenu-shortdoi-short";
         updateShort.setAttribute(
             "label",
-            stringBundle.GetStringFromName("shortdoi-menu-short-label")
+            getString("shortdoi-menu-short-label", stringBundle)
         );
         updateShort.addEventListener("command", () => {
             ShortDOI.updateSelectedItems("short");
@@ -118,7 +169,7 @@ ShortDOI = {
         updateLong.id = "zotero-itemmenu-shortdoi-long";
         updateLong.setAttribute(
             "label",
-            stringBundle.GetStringFromName("shortdoi-menu-long-label")
+            getString("shortdoi-menu-long-label", stringBundle)
         );
         updateLong.addEventListener("command", () => {
             ShortDOI.updateSelectedItems("long");
@@ -128,7 +179,7 @@ ShortDOI = {
         updateCheck.id = "zotero-itemmenu-shortdoi-check";
         updateCheck.setAttribute(
             "label",
-            stringBundle.GetStringFromName("shortdoi-menu-check-label")
+            getString("shortdoi-menu-check-label", stringBundle)
         );
         updateCheck.addEventListener("command", () => {
             ShortDOI.updateSelectedItems("check");
@@ -149,7 +200,7 @@ ShortDOI = {
             menuitem.id = "menu_Tools-shortdoi-preferences";
             menuitem.setAttribute(
                 "label",
-                stringBundle.GetStringFromName("shortdoi-preferences-label")
+                getString("shortdoi-preferences-label", stringBundle)
             );
             menuitem.addEventListener("command", () => {
                 ShortDOI.openPreferenceWindow();
@@ -163,7 +214,7 @@ ShortDOI = {
         submenu.id = "menu_Tools-shortdoi-menu";
         submenu.setAttribute(
             "label",
-            stringBundle.GetStringFromName("shortdoi-autoretrieve-label")
+            getString("shortdoi-autoretrieve-label", stringBundle)
         );
         let submenupopup = _create(doc, "menupopup");
         submenupopup.id = "menu_Tools-shortdoi-menu-popup";
@@ -176,7 +227,7 @@ ShortDOI = {
         itemShort.setAttribute("type", "checkbox");
         itemShort.setAttribute(
             "label",
-            stringBundle.GetStringFromName("shortdoi-autoretrieve-short-label")
+            getString("shortdoi-autoretrieve-short-label", stringBundle)
         );
         itemShort.addEventListener("command", () => {
             ShortDOI.changePref("short");
@@ -187,7 +238,7 @@ ShortDOI = {
         itemLong.setAttribute("type", "checkbox");
         itemLong.setAttribute(
             "label",
-            stringBundle.GetStringFromName("shortdoi-autoretrieve-long-label")
+            getString("shortdoi-autoretrieve-long-label", stringBundle)
         );
         itemLong.addEventListener("command", () => {
             ShortDOI.changePref("long");
@@ -198,7 +249,7 @@ ShortDOI = {
         itemCheck.setAttribute("type", "checkbox");
         itemCheck.setAttribute(
             "label",
-            stringBundle.GetStringFromName("shortdoi-autoretrieve-check-label")
+            getString("shortdoi-autoretrieve-check-label", stringBundle)
         );
         itemCheck.addEventListener("command", () => {
             ShortDOI.changePref("check");
@@ -209,7 +260,7 @@ ShortDOI = {
         itemNone.setAttribute("type", "checkbox");
         itemNone.setAttribute(
             "label",
-            stringBundle.GetStringFromName("shortdoi-autoretrieve-no-label")
+            getString("shortdoi-autoretrieve-no-label", stringBundle)
         );
         itemNone.addEventListener("command", () => {
             ShortDOI.changePref("none");

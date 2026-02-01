@@ -213,11 +213,8 @@ async function startup({ id, version, resourceURI, rootURI = resourceURI.spec })
         var aomStartup = Cc[
             "@mozilla.org/addons/addon-manager-startup;1"
         ].getService(Ci.amIAddonManagerStartup);
-        var manifestURI = Services.io.newURI(rootURI + "manifest.json");
-        chromeHandle = aomStartup.registerChrome(manifestURI, [
-            ["locale", "zoteroshortdoi", "en-US", "locale/en-US/"],
-            ["locale", "zoteroshortdoi", "de", "locale/de/"],
-        ]);
+        var manifestURI = Services.io.newURI(rootURI + "chrome.manifest");
+        chromeHandle = aomStartup.registerChrome(manifestURI, []);
         dump("DOI Manager: Chrome registered\n");
 
         // Load main script
@@ -237,7 +234,7 @@ async function startup({ id, version, resourceURI, rootURI = resourceURI.spec })
         }
 
         dump("DOI Manager: Initializing ShortDOI\n");
-        ShortDOI.init({ id, version, rootURI });
+        ShortDOI.init({ id, version, rootURI: rootURI || (resourceURI && resourceURI.spec) });
         log("ShortDOI.init completed");
 
         if (Zotero.platformMajorVersion >= 102) {
