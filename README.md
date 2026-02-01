@@ -1,17 +1,12 @@
 # Zotero DOI Manager
 
-This is an add-on for Zotero, a research source management tool. The add-on can auto-fetch DOI names for journal articles using the CrossRef API, as well as look up shortDOI names using http://shortdoi.org. The add-on additionally verifies that stored DOIs are valid and marks invalid DOIs.
+An add-on for [Zotero](https://www.zotero.org/) that fetches DOI names for journal articles using the CrossRef API and shortDOIs using [shortdoi.org](http://shortdoi.org). It also verifies stored DOIs and marks invalid ones.
 
-## Fork Information
+## Features
 
-This is a fork of [zotero-shortdoi](https://github.com/bwiernik/zotero-shortdoi) by [Brenton M. Wiernik](https://github.com/bwiernik).
-
-### Changes in This Fork (v1.6.0)
-
-- **Zotero 8 compatibility**: Updated to support Zotero 8 with ESM module imports
-- **Improved Services loading**: Fixed Services object loading to work across Zotero 6, 7, and 8
-- **Enhanced error handling**: Added comprehensive debug logging and error handling in bootstrap process
-- **Version compatibility**: Now supports Zotero 6.0 through 8.*
+- **Get shortDOIs**: Look up shortDOIs for selected items (replacing stored DOIs, if any) and mark invalid DOIs
+- **Get long DOIs**: Look up full DOIs for selected items and mark invalid DOIs
+- **Verify and clean DOIs**: Look up full DOIs, verify stored DOIs are valid, and mark invalid ones. Also removes unnecessary prefixes (e.g. `doi:`, `https://doi.org/`, or publisher URL prefixes) from the DOI field
 
 ## Compatibility
 
@@ -21,29 +16,27 @@ This is a fork of [zotero-shortdoi](https://github.com/bwiernik/zotero-shortdoi)
 | Zotero 7.x     | ✅        |
 | Zotero 8.x     | ✅        |
 
-Please report any bugs, questions, or feature requests in the [Issues](https://github.com/orbital188/zotero-shortdoi/issues) section.
+## Installation
 
-Code for this extension is based in part on [Zotero Google Scholar Citations](https://github.com/beloglazov/zotero-scholar-citations) by Anton Beloglazov.
+1. Download the `.xpi` file from the [latest release](https://github.com/orbital188/zotero-shortdoi/releases/latest)
+   - If using Firefox, right-click the file link and choose **Save Link As…**
+2. In Zotero, open **Tools → Add-Ons…**
+3. Drag the downloaded `.xpi` file into the Add-Ons window, or click the Gear ⚙ button → **Install Add-On from File…** and select the file
 
-### Plugin Functions
+## Credits & License
 
-  - Get shortDOIs: For the selected items, look up shortDOIs (replacing stored DOIs, if any) and mark invalid DOIs.
-  - Get long DOIs: For the selected items, look up full DOIs (replacing stored DOIs, if any) and mark invalid DOIs.
-  - Verify and clean DOIs: For the selected items, look up full DOIs (replacing stored DOIs, if any), verify that stored DOIs are valid, and mark invalid DOIs.
-    - This function also removes unnecessary prefixes (such as `doi:`, `https://doi.org/`, or a publisher URL prefix) from the DOI field.
+**Open source.** This software is released under the [Mozilla Public License (MPL) 2.0](https://mozilla.org/MPL/2.0/). You may use, modify, and distribute it freely in compliance with the license.
 
-### How to Install
+- Original work by [Brenton M. Wiernik](https://github.com/bwiernik) — [zotero-shortdoi](https://github.com/bwiernik/zotero-shortdoi)
+- Code adapted in part from [Zotero Google Scholar Citations](https://github.com/beloglazov/zotero-scholar-citations) by Anton Beloglazov
+- Zotero 8 compatibility and updates by orbital188
 
-  - Download the `.xpi` file for the [latest release](https://github.com/orbital188/zotero-shortdoi/releases/latest).
-    - For the original version without Zotero 8 support, see [bwiernik's releases](https://github.com/bwiernik/zotero-shortdoi/releases/latest).
-    - If you are using Firefox, be sure to right-click on the file link and choose Save Link As…
-  - In Zotero, open the Tools → Add-Ons… menu
-  - Drag the downloaded `.xpi` file to the Add-Ons popup window.
-    - Alternatively, click on the Gear ⚙ button in Add-Ons popup window, choose Install Add-On from File…, and select the downloaded `.xpi` file.
+## Changes in This Fork (v1.6.0)
 
-### License
+- **Zotero 8 compatibility**: Support for Zotero 8 with ESM module imports
+- **Services loading**: Fixed Services object loading across Zotero 6, 7, and 8
+- **Error handling**: Debug logging and improved error handling in bootstrap
 
-Original work Copyright (C) 2017 Brenton M. Wiernik
-Fork modifications Copyright (C) 2025 orbital188
+---
 
-Distributed under the Mozilla Public License (MPL) Version 2.0.
+Bugs, questions, and feature requests: [Issues](https://github.com/orbital188/zotero-shortdoi/issues)
