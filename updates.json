@@ -3,8 +3,8 @@
     "zoteroshortdoi@wiernik.org": {
       "updates": [
         {
-          "version": "1.6.5",
-          "update_link": "https://github.com/orbital188/zotero-shortdoi/releases/download/v1.6.5/zotero-doi-manager-1.6.5.xpi",
+          "version": "1.6.6",
+          "update_link": "https://github.com/orbital188/zotero-shortdoi/releases/download/v1.6.6/zotero-doi-manager-1.6.6.xpi",
           "applications": {
             "gecko": {
               "strict_min_version": "60.9",
