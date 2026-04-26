@@ -3,7 +3,7 @@
 An add-on for [Zotero](https://www.zotero.org/) that fetches DOI names for journal articles using the CrossRef API and shortDOIs using [shortdoi.org](http://shortdoi.org). It also verifies stored DOIs and marks invalid ones.
 
 - **Version:** 1.6.6  
-- **Supported:**  8.x  
+- **Supported:**  9.x  
 
 ## Features
 
